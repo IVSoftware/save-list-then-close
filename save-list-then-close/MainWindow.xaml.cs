@@ -84,7 +84,7 @@ namespace save_list_then_close
                     Assembly.GetEntryAssembly()?.GetName()?.Name ?? "SaveThenClose",
                     "list-data.json");
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-                var json = JsonConvert.SerializeObject(Items);
+                var json = JsonConvert.SerializeObject(Items, Formatting.Indented);
                 File.WriteAllText(path, json);
             });
             // Add a few seconds for good measure, just for demo purposes.
