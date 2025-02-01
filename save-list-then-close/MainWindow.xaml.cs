@@ -81,7 +81,9 @@ namespace save_list_then_close
                 var path = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "StackOverflow",
-                    Assembly.GetEntryAssembly()?.GetName()?.Name ?? "SaveThenClose");
+                    Assembly.GetEntryAssembly()?.GetName()?.Name ?? "SaveThenClose",
+                    "list-data.json");
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
                 var json = JsonConvert.SerializeObject(Items);
                 File.WriteAllText(path, json);
             });
