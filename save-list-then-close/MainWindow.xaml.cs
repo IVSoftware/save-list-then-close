@@ -39,13 +39,20 @@ namespace save_list_then_close
                             e.Cancel = true;
                             await Dispatcher.BeginInvoke(async () =>
                             {
-                                IsEnabled = false;  // Prevent any more calls.
-                                await DataContext.Save();
-                                _confirmClosure = false;
-                                Close();
+                                try
+                                {
+                                    Mouse.OverrideCursor = Cursors.Wait;
+                                        IsEnabled = false;  // Prevent any more calls.
+                                        await DataContext.Save();
+                                        _confirmClosure = false;
+                                        Close();
+                                }
+                                finally
+                                {
+                                    Mouse.OverrideCursor = null;
+                                }
                             });
                             break;
-
                         case MessageBoxResult.No:
                             break;
 
@@ -69,26 +76,17 @@ namespace save_list_then_close
 
         internal async Task Save()
         {
-            try
+            await Task.Run(() =>
             {
-                Mouse.OverrideCursor = Cursors.Wait;
-                await Task.Run(() =>
-                {
-                    var path = Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                        "StackOverflow",
-                        Assembly.GetEntryAssembly()?.GetName()?.Name ?? "SaveThenClose");
-                        var json = JsonConvert.SerializeObject(Items);
-                    File.WriteAllText(path, json);
-                });
-                // Add a few seconds for good measure, just for demo purposes.
-                await Task.Delay(TimeSpan.FromSeconds(2.5));
-            }
-            finally
-            {
-                // Reset the cursor to default
-                Mouse.OverrideCursor = null;
-            }
+                var path = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "StackOverflow",
+                    Assembly.GetEntryAssembly()?.GetName()?.Name ?? "SaveThenClose");
+                var json = JsonConvert.SerializeObject(Items);
+                File.WriteAllText(path, json);
+            });
+            // Add a few seconds for good measure, just for demo purposes.
+            await Task.Delay(TimeSpan.FromSeconds(2.5));
         }
     }
 
