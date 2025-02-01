@@ -1,0 +1,11 @@
+﻿<Application x:Class="save_list_then_close.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:save_list_then_close"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Style TargetType="DataGrid">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </Application.Resources>
+</Application>
